@@ -1,0 +1,29 @@
+# ---- R ----
+.Rhistory
+.Rapp.history
+.RData
+.Rproj.user
+*.Rproj
+.Renviron
+*.Rout
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# ---- Editors ----
+*.swp
+.idea/
+.vscode/
+
+# ---- Large intermediates (all regenerable via `make all`) ----
+# The processed analysis file and imputation objects are small and are kept
+# in the repository intentionally for reproducibility; nothing is ignored here.
