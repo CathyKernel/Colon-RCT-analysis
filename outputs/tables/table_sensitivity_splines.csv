@@ -1,0 +1,3 @@
+"model","loglik","AIC","LRT_p"
+"Linear age and nodes (df = 1 each)",-3040.68,6109.4,
+"Flexible splines (df = 4 each)",-3028.33,6096.8,"< 0.001"

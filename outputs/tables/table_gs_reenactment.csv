@@ -1,0 +1,4 @@
+"scenario","conditional_power","at_interim"
+"Null effect (HR = 1)",0.706,"HR = 0.52, Z = 3.38, 118 events (50% of planned information)"
+"Design alternative (HR = 0.65)",0.998,"HR = 0.52, Z = 3.38, 118 events (50% of planned information)"
+"Observed trend at interim",1,"HR = 0.52, Z = 3.38, 118 events (50% of planned information)"

@@ -1,0 +1,5 @@
+prior,prior_mu_logHR,prior_sigma_logHR,posterior_mean_HR,posterior_median_HR,cr2.5,cr97.5,P_HR_lt_1,P_HR_lt_0.8
+Skeptical,0.0,0.421,0.61,0.605,0.485,0.757,1.0,0.9935
+Weakly-informative,0.0,1.0,0.591,0.586,0.466,0.738,1.0,0.9965
+Enthusiastic,-0.431,0.421,0.592,0.587,0.474,0.734,1.0,0.9972
+"Frequentist (adj. Cox, MI) [reference]",,,0.621,,0.496,0.776,,

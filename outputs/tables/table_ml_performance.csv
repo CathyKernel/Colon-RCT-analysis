@@ -1,0 +1,6 @@
+model,c_index_cv,c_index_cv_sd,auc_5y_cv,ibs_1to5y_cv,c_index_apparent
+Random survival forest,0.6456,0.0244,0.6765,0.2174,0.7133
+Clinical Cox (main effects),0.6339,0.0255,0.6517,0.2217,0.6513
+Gradient boosting (Cox loss),0.633,0.0272,0.6623,0.2252,0.717
+XGBoost (Cox objective),0.6248,0.0258,,,0.7415
+Elastic-net Cox,0.6198,0.0281,0.6455,0.2256,0.6275
