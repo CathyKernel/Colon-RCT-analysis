@@ -281,7 +281,7 @@ used to produce the committed outputs.
 
 ## 9. Author and License
 
-**Cathy** - MSc Biostatistics capstone project.
+**Cathy** 
 
 Released under the MIT License (see `LICENSE`). The trial data are
 redistributed in good faith for research and educational use with full
