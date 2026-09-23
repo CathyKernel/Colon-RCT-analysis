@@ -1,0 +1,5 @@
+quartile,n,mean_predicted_benefit,mean_baseline_risk,observed_risk_diff,n_treated,n_control,events
+Q1,149,0.2891,0.7103,-0.1277,60,89,98
+Q2,148,0.186,0.5816,-0.161,66,82,79
+Q3,148,0.1256,0.5197,-0.1177,77,71,72
+Q4,149,0.0112,0.4657,-0.1929,86,63,64
