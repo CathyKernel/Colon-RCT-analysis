@@ -24,31 +24,33 @@ R_MODULES := R/01_data_curation.R \
 
 PY_MODULES := python/02_machine_learning.py \
               python/03_bayesian_analysis.py \
-              python/04_cate_heterogeneity.py
+              python/04_cate_heterogeneity.py \
+              python/05_rmst_analysis.py \
+              python/06_figure_rebuilds.py
 
 .PHONY: all r python clean module
 
 all: r python
-	@echo "=== Full pipeline complete: see outputs/ and report/ ==="
+        @echo "=== Full pipeline complete: see outputs/ and report/ ==="
 
 r:
-	@for f in $(R_MODULES); do \
-		echo "=== Running $$f ==="; \
-		$(RSCRIPT) $$f || exit 1; \
-	done
+        @for f in $(R_MODULES); do \
+                echo "=== Running $$f ==="; \
+                $(RSCRIPT) $$f || exit 1; \
+        done
 
 python: r
-	@for f in $(PY_MODULES); do \
-		echo "=== Running $$f ==="; \
-		$(PYTHON) $$f || exit 1; \
-	done
+        @for f in $(PY_MODULES); do \
+                echo "=== Running $$f ==="; \
+                $(PYTHON) $$f || exit 1; \
+        done
 
 module:
-	@if [ -n "$(R)" ]; then $(RSCRIPT) R/$(R); fi
-	@if [ -n "$(PY)" ]; then $(PYTHON) python/$(PY); fi
+        @if [ -n "$(R)" ]; then $(RSCRIPT) R/$(R); fi
+        @if [ -n "$(PY)" ]; then $(PYTHON) python/$(PY); fi
 
 clean:
-	rm -f outputs/figures/*.png outputs/figures/*.pdf
-	rm -f outputs/tables/*.csv
-	rm -f data/processed/*
-	@echo "Generated outputs removed. Run 'make all' to regenerate."
+        rm -f outputs/figures/*.png outputs/figures/*.pdf
+        rm -f outputs/tables/*.csv
+        rm -f data/processed/*
+        @echo "Generated outputs removed. Run 'make all' to regenerate."

@@ -30,8 +30,11 @@ design, and the coverage of Wald and bootstrap confidence intervals under
 non-proportional hazards; and (iv) machine-learning and Bayesian methods
 (cross-validated survival prediction with penalized, ensemble, and boosted
 models; a Weibull proportional-hazards Bayesian analysis with prior
-sensitivity and sequential monitoring; and doubly robust estimation of
-heterogeneous absolute treatment effects). The re-analysis confirms a
+sensitivity and sequential monitoring; and doubly robust AIPW estimation of heterogeneous absolute treatment effects). A
+newly added restricted-mean-survival-time (RMST) module quantifies the
+benefit in absolute time units (0.63 disease-free years gained within 5
+years), a collapsible estimand that requires no proportional-hazards
+assumption. The re-analysis confirms a
 substantial and robust treatment benefit of levamisole + 5-FU (adjusted HR =
 0.62, 95% CI 0.50-0.77; 5-year DFS 59.2% vs 42.4%; NNT = 6), demonstrates
 that a modern group-sequential design would likely have stopped the trial
@@ -58,7 +61,8 @@ trial today?** The objectives are:
    covariate-adjusted Cox models with multiple imputation, robust variance
    estimation, absolute-benefit measures (risk differences, NNT), and
    competing-risk sensitivity analyses that handle deaths without recurrence
-   explicitly.
+   explicitly, and absolute-benefit summaries in both percentage points
+   (risk differences, NNT) and time units (restricted mean survival time).
 2. **Redesign the trial** as it would be designed today: formal sample-size
    calculation for a target hazard ratio, a group-sequential design with
    alpha- and beta-spending, and a re-enactment of interim monitoring using
@@ -76,6 +80,12 @@ trial today?** The objectives are:
 6. **Characterize treatment-effect heterogeneity** in absolute terms using
    jackknife pseudo-observations, cross-fitted G-computation, and doubly
    robust AIPW estimation.
+
+7. **Re-express the treatment benefit in time units** with the restricted
+   mean survival time (RMST): horizon-specific differences and ratios with
+   bootstrap CIs, a covariate-adjusted pseudo-observation regression, and
+   stratified analyses within proportional-hazards violators - a
+   collapsible counterpart to the non-collapsible hazard ratio.
 
 ## 2. Data
 
@@ -113,6 +123,8 @@ only through files in `data/` and `outputs/`.
 | `python/02_machine_learning.py` | Python | Prognostic prediction | clinical Cox, elastic-net Cox, random survival forest, gradient boosting (Cox loss), XGBoost (Cox objective); 5x5-fold stratified CV; C-index, IPCW AUC at 5 years, integrated Brier score; calibration by risk deciles; permutation importance |
 | `python/03_bayesian_analysis.py` | Python | Bayesian re-analysis | Weibull PH model with `pm.Censored` right-censoring; skeptical / weakly-informative / enthusiastic priors; event-driven sequential monitoring; posterior predictive checks; LOO model comparison (Weibull vs exponential) |
 | `python/04_cate_heterogeneity.py` | Python | Heterogeneous treatment effects | jackknife pseudo-observations for 5-year risk; cross-fitted G-computation and AIPW with influence-function SEs; cross-fitted T-learner (LASSO) for CATE; benefit-by-risk analysis |
+| `python/05_rmst_analysis.py` | Python | Restricted mean survival time | KM-based RMST at horizons 3-8 years (difference and ratio, percentile bootstrap CIs); covariate-adjusted RMST via pseudo-observation regression; RMST within the obstruction stratum (strongest PH violation) |
+| `python/06_figure_rebuilds.py` | Python | Publication-grade report figures | matplotlib rebuilds (from the analysis data and saved tables) of the figures whose original ggplot renderings had layout defects: KM curves with one-row-per-arm risk tables, subgroup forest plot, Schoenfeld diagnostics, Simulation A power bars, and the Aalen-Johansen vs naive cumulative-incidence figure; validations are printed against the reference tables and the report text |
 
 ## 4. Key Results
 
@@ -130,7 +142,11 @@ only through files in `data/` and `outputs/`.
 Absolute benefit at 5 years: DFS 59.2% (Lev+5FU) vs 42.4% (Observation);
 risk difference -16.7 percentage points (bootstrap 95% CI -24.2 to -9.4),
 NNT = 6. The AIPW doubly robust estimate of the 5-year risk difference is
--16.2 points (95% CI -23.9 to -8.5).
+-16.2 points (95% CI -23.9 to -8.5). The restricted mean survival time
+analysis translates the same benefit into 0.63 disease-free years gained
+within 5 years (95% CI 0.33-0.92), rising to 1.13 years by 8 years; the
+covariate-adjusted pseudo-observation estimate (0.57 years) agrees
+because the RMST difference is collapsible.
 
 ![Kaplan-Meier DFS](outputs/figures/fig_km_dfs.png)
 
@@ -191,15 +207,17 @@ modification - a clinically important distinction for treatment decisions.
 │   ├── 04_subgroup_analysis.R
 │   ├── 05_trial_design.R
 │   └── 06_simulation_study.R
-├── python                        # machine learning, Bayesian, heterogeneity
+├── python                        # machine learning, Bayesian, heterogeneity, RMST
 │   ├── 00_common.py
 │   ├── 02_machine_learning.py
 │   ├── 03_bayesian_analysis.py
-│   └── 04_cate_heterogeneity.py
+│   ├── 04_cate_heterogeneity.py
+│   └── 05_rmst_analysis.py
 ├── outputs
-│   ├── figures/                  # all figures (PNG for README, PDF for report)
+│   ├── figures/                  # all figures (vector PDF for reports, PNG for README)
 │   └── tables/                   # all result tables as CSV
-├── report                        # final project report (PDF)
+├── report                        # full project report (capstone format, PDF)
+├── paper                         # arXiv-style preprint (main.tex, refs.bib, PDF)
 ├── docs
 │   └── codebook.md               # data dictionary and provenance
 └── environment                   # requirements.txt, R session info
@@ -219,7 +237,7 @@ modification - a clinically important distinction for treatment decisions.
 
 ```bash
 # from the repository root
-make all          # runs R modules 01-06, then Python modules 02-04
+make all          # runs R modules 01-06, then Python modules 02-05
 ```
 
 or step by step:
@@ -235,6 +253,16 @@ Rscript R/06_simulation_study.R      # ~8-12 minutes
 python python/02_machine_learning.py
 python python/03_bayesian_analysis.py
 python python/04_cate_heterogeneity.py
+python python/05_rmst_analysis.py
+python python/06_figure_rebuilds.py  # authoritative source of the report figures
+```
+
+Reports are compiled with [Tectonic](https://tectonic-typesetting.github.io/)
+from their respective directories:
+
+```bash
+(cd report && tectonic main.tex)   # full capstone report
+(cd paper  && tectonic main.tex)   # arXiv-style preprint
 ```
 
 All scripts use fixed seeds (global seed 20260916) and write only to
