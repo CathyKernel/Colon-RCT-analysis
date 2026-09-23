@@ -1,4 +1,0 @@
-"scenario","efficacy_IA1","efficacy_IA2","efficacy_final","total_efficacy","futility_IA1","futility_IA2","expected_events","expected_events_saved"
-"H1: HR = 0.65 (as designed)",0.186,0.422,0.222,0.829,0.025,0.043,183.44,51.56
-"H0: HR = 1.00 (futility adhered)",0.002,0.008,0.014,0.024,0.549,0.301,152.65,82.35
-"H0: HR = 1.00 (futility ignored)",0.001,0.009,0.017,0.027,0,0,234.38,0.62

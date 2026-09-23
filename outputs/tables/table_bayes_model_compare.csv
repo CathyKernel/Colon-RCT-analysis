@@ -1,3 +1,0 @@
-model,rank,elpd_diff,weight
-Weibull PH,0,0.0,1.0
-Exponential PH,1,-18.0,0.0

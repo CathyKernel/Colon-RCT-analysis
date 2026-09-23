@@ -1,7 +1,0 @@
-"strength_lab","hr","n_valid","power_un","power_ad","power_lr","sd_un","mean_se_un","sd_ad","mean_se_ad","bias_un","bias_ad","events"
-"No prognostic covariates",1,1000,0.025,0.029,0.025,0.124,0.127,0.13,0.13,-0.006,-0.006,251.96
-"Moderate prognostic strength",1,1000,0.025,0.025,0.025,0.115,0.117,0.122,0.121,0.004,0.005,293.32
-"Full trial-calibrated strength",1,1000,0.022,0.032,0.022,0.114,0.114,0.122,0.117,0,-0.001,313.16
-"No prognostic covariates",0.72,1000,0.716,0.704,0.718,0.129,0.132,0.136,0.136,0,-0.009,232.32
-"Moderate prognostic strength",0.72,1000,0.725,0.766,0.728,0.121,0.12,0.129,0.124,0.012,-0.006,280.76
-"Full trial-calibrated strength",0.72,999,0.726,0.809,0.729,0.113,0.115,0.121,0.119,0.033,-0.01,305.86
