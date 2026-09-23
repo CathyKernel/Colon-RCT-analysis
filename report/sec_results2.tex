@@ -1,0 +1,146 @@
+% ------------------------------------------------------------------------------
+% 5 Results II -- Subgroups, redesign, re-enacted monitoring
+% ------------------------------------------------------------------------------
+\section{Results II: Subgroups, Trial Redesign, and Re-enacted
+Monitoring}\label{sec:res-design}
+
+\subsection{Subgroup analyses}
+
+Figure~\ref{fig:subgroup} presents the seven pre-specified subgroup
+analyses for the primary contrast. The hazard ratio is remarkably stable
+across subgroups---every point estimate lies between $0.46$ and $0.81$
+and every confidence interval overlaps the overall estimate of $0.62$.
+Only one nominal interaction reaches $p<0.05$: sex
+(interaction $p = 0.043$), with a substantially larger effect in men
+(HR $0.46$, 95\% CI $0.33$--$0.64$) than in women (HR $0.79$, 95\% CI
+$0.58$--$1.07$). Against the Bonferroni-adjusted threshold of
+$0.0071$ appropriate for seven tests, this signal does not survive, and
+no biological mechanism has been established for sex-specific efficacy
+of 5-FU-based regimens in this setting. The honest reading is
+\emph{consistent relative effect across all examined subgroups}, a
+textbook illustration of why subgroup forest plots without
+multiplicity-aware interpretation manufacture false discoveries.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig_subgroup_forest.pdf}
+  \caption{Pre-specified subgroup analyses for disease-free survival,
+  levamisole plus 5-FU versus observation. Right column: hazard ratios
+  with 95\% CIs and interaction-test $p$-values (adjusted for nodal
+  count).}
+  \label{fig:subgroup}
+\end{figure}
+
+\subsection{The redesigned trial}
+
+Table~\ref{tab:design} summarizes the fixed design and the
+group-sequential redesign. For the target hazard ratio of $0.65$ at
+one-sided $\alpha = 0.025$ with 90\% power, the fixed design requires
+226 DFS events (approximately 322 patients under the assumed accrual
+and follow-up). The three-look sequential design inflates the maximum
+to 235 events but compensates with expected savings whenever the effect
+is real or absent. The O'Brien--Fleming efficacy boundary is naturally
+conservative early ($Z = 2.963$, one-sided $p = 0.0015$ at the first
+interim) and relaxes toward $2.014$ at the final analysis; the
+non-binding futility boundary starts at $Z = 0.079$, meaning a first
+look with essentially no observed trend would trigger the futility
+signal.
+
+\begin{table}[htbp]
+\centering\footnotesize
+\caption{The redesigned group-sequential trial: boundaries and operating
+characteristics from \texttt{gsDesign}. Efficacy uses O'Brien--Fleming
+alpha-spending; futility uses a non-binding Hwang--Shih--DeCani
+beta-spending ($\gamma = -4$).}
+\label{tab:design}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c c c c}
+\toprule
+Analysis & Events & Effic.\ $Z$ & 1-sided $p$ & HR at bound & Futil.\ $Z$ & HR at bound \\
+\midrule
+Interim 1 (50\%)  & 118 & 2.963 & 0.0015 & 0.579 & 0.078 & 0.986 \\
+Interim 2 (75\%)  & 177 & 2.359 & 0.0091 & 0.701 & 1.006 & 0.859 \\
+Final (100\%)     & 235 & 2.014 & 0.0220 & 0.769 & 2.014 & 0.769 \\
+\midrule
+\multicolumn{7}{@{}l@{}}{\emph{Design-theoretic probabilities:}
+$P(\text{reject} \mid \mathrm{HR}=0.65) = 0.900$;\;
+$P(\text{reject} \mid \mathrm{HR}=1) = 0.024$ (futility adhered)} \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+Figure~\ref{fig:gsbound} visualizes the boundaries on the $Z$ and
+one-sided $p$-value scales, and Figure~\ref{fig:power} shows how power
+and required events vary with the target hazard ratio: the design
+maintains 90\% power at $\mathrm{HR}=0.65$ with 226 events, but power
+falls steeply for weaker effects---at $\mathrm{HR}=0.80$, nearly 850
+events would be required, a useful reminder of why ambitious trials
+with modest expected effects grow so large.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_gs_boundaries.pdf}
+  \caption{Group-sequential boundaries of the redesigned trial on the
+  $Z$ scale (left axis) and one-sided $p$-value scale (right axis).
+  Red: efficacy (O'Brien--Fleming spending); blue: non-binding
+  futility (Hwang--Shih--DeCani).}
+  \label{fig:gsbound}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_power_curve.pdf}
+  \caption{Power as a function of the target hazard ratio under the
+  Schoenfeld--Freedman approximation (one-sided $\alpha=0.025$, 1:1
+  allocation), annotated with the required event count at
+  $\mathrm{HR}=0.65$.}
+  \label{fig:power}
+\end{figure}
+
+\subsection{Re-enacting interim monitoring on the real data}
+
+The most striking result of this project emerges when the redesigned
+monitoring plan is applied to the \emph{actual} event stream.
+Censoring every patient's follow-up at the time at which the 118th DFS
+event was observed (information fraction 50\%) and refitting the two-arm Cox model
+yields an interim hazard ratio of $0.52$ and a $Z$-statistic of
+$3.38$---\emph{above the efficacy boundary of $2.963$}
+(Figure~\ref{fig:reenact}). Under the redesign, the trial would have
+stopped at the first interim analysis and declared the levamisole plus
+5-FU regimen superior to observation, after only 118 of the 506 events
+that were eventually observed.
+
+Conditional power calculations quantify how decisive this interim
+result is: the probability of eventually crossing the final boundary is
+70.6\% even under the null, 99.8\% under the design alternative, and
+essentially 100\% if the observed interim trend persists. A cross-check
+with \texttt{gsDesign}'s own conditional-power machinery
+(\texttt{gsCP}) returns somewhat higher values ($0.834$ and $0.999$ under
+the null and alternative), because it accumulates the crossing
+probabilities at \emph{both} remaining analyses with boundaries
+re-optimized after the interim, whereas the hand-rolled calculation uses
+a single-look normal approximation to the final analysis only.
+The contrast with the Bayesian view is instructive: sequential
+posterior probabilities under the skeptical prior
+(Section~\ref{sec:res-bayes}) would have signalled benefit even
+earlier, at the 25\% information look.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_gs_reenactment.pdf}
+  \caption{Re-enacted interim monitoring using the real trial data.
+  The observed interim result after 118 events (HR $0.52$,
+  $Z = 3.38$, green marker) crosses the O'Brien--Fleming efficacy
+  boundary ($2.96$), so the redesigned trial would have stopped for
+  efficacy at the first interim analysis.}
+  \label{fig:reenact}
+\end{figure}
+
+Two interpretive cautions apply. First, the historical trial was not
+designed with this monitoring plan, so the re-enactment is a
+counterfactual exercise, not a critique of the original conduct;
+its message is about how much evidence was already present early in
+the event stream. Second, the interim hazard ratio of $0.52$ is more
+extreme than the final estimate of $0.62$, a reminder that early
+random highs in $Z$ are partly regression artefacts; the design's
+conservative early boundary exists precisely to price this randomness
+in.

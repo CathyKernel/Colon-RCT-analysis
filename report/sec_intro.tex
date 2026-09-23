@@ -1,0 +1,179 @@
+% ------------------------------------------------------------------------------
+% 1 Introduction
+% ------------------------------------------------------------------------------
+\section{Introduction}\label{sec:intro}
+
+Colorectal cancer is one of the most common malignancies worldwide, and for
+patients undergoing potentially curative resection the question of whether
+systemic adjuvant chemotherapy should follow surgery remained open for much
+of the twentieth century. The North Central Cancer Treatment Group (NCCTG)
+program addressed this question directly: building on an earlier randomized
+comparison of observation against levamisole alone~\cite{laurie1989}, the
+investigators added a third arm combining the immunomodulator levamisole
+with the antimetabolite 5-fluorouracil (5-FU)~\cite{moertel1990}. The
+combination reduced recurrence and mortality substantially and became a
+standard of care for resected stage B/C colon carcinoma. The individual
+patient data from this program were subsequently contributed to the
+\texttt{survival} package for R~\cite{therneau2026}, where they now serve as
+one of the canonical datasets for teaching survival analysis; the version
+analysed here contains 929 patients from a single study.
+
+Re-analyzing an old trial with new methods is more than an academic
+exercise, and five considerations motivated each analytical module of this
+project. First, endpoint definitions and analysis conventions have evolved:
+modern adjuvant colorectal trials define disease-free survival (DFS) as the
+time to recurrence \emph{or} death, whereas the published coding of this
+dataset treats death without recurrence as censoring; a rigorous
+re-analysis must therefore address both views and, importantly, the
+competing-risks consequences of the difference. Second, missing-data
+handling, covariate-adjusted estimation, and absolute-benefit reporting
+have all been refined since the original publications, and regulatory
+guidance now actively encourages pre-specified covariate adjustment in the
+primary analysis of randomized trials~\cite{fda2023,kahan2014}. Third, the
+trial-design landscape has changed: group-sequential designs with alpha-
+and beta-spending functions are now the default in oncology, and it is
+natural to ask whether this trial---run with a fixed-sample
+mindset---would have stopped early under a modern monitoring
+plan~\cite{lan-demets1983,o1979}. Fourth, machine-learning prediction
+models and Bayesian machinery offer perspectives on prognosis and evidence
+accumulation that complement the classical
+toolkit~\cite{harrell2015,gelman2013}. Finally, the modern estimand
+framework and recent methods for heterogeneous treatment effects invite a
+re-examination of \emph{for whom} the benefit is
+largest~\cite{hernan2020}.
+
+Accordingly, this project integrates all of these perspectives into a
+single coherent pipeline with six objectives:
+
+\begin{enumerate}[leftmargin=1.7em, itemsep=1.5pt, topsep=3pt]
+  \item \textbf{Re-estimate the treatment effects} on DFS and overall
+        survival with covariate-adjusted Cox models fitted on multiply
+        imputed data, explicit proportional-hazards diagnostics,
+        competing-risk sensitivity analyses, and bootstrap and
+        restricted-mean-survival-time absolute-benefit measures
+        (Sections~\ref{sec:methods-freq}~and~\ref{sec:res-tx});
+  \item \textbf{Redesign the trial} as it would be designed today---a
+        formal sample-size calculation and a three-look group-sequential
+        design---and re-enact interim monitoring on the real event times
+        (Sections~\ref{sec:methods-design}~and~\ref{sec:res-design});
+  \item \textbf{Quantify operating characteristics by simulation},
+        covering the efficiency of covariate adjustment, the type-I error
+        and power of the sequential design, and confidence-interval
+        coverage under non-proportional hazards
+        (Sections~\ref{sec:methods-sim}~and~\ref{sec:res-sim});
+  \item \textbf{Build and honestly validate prognostic survival models}
+        spanning classical regression, penalization, and ensembles of
+        trees (Sections~\ref{sec:methods-ml}~and~\ref{sec:res-ml});
+  \item \textbf{Conduct a Bayesian re-analysis} with prior sensitivity,
+        event-driven sequential monitoring, posterior predictive checks,
+        and baseline-model criticism
+        (Sections~\ref{sec:methods-bayes}~and~\ref{sec:res-bayes});
+  \item \textbf{Characterise heterogeneous treatment effects} on the
+        absolute five-year risk using jackknife pseudo-observations,
+        cross-fitted G-computation, and doubly robust AIPW estimation
+        (Sections~\ref{sec:methods-cate}~and~\ref{sec:res-cate}).
+\end{enumerate}
+
+The report is organized to mirror the repository structure: Section
+\ref{sec:data} describes the data and endpoint construction; Section
+\ref{sec:methods} details all statistical methods; Sections
+\ref{sec:res-tx}--\ref{sec:res-cate} present results in five thematic
+blocks; Section~\ref{sec:discussion} discusses findings, strengths, and
+limitations. All analyses are scripted in R and Python with fixed random
+seeds, and Section~\ref{sec:software} records the exact software
+environment required for byte-level reproduction.
+
+% ------------------------------------------------------------------------------
+% 2 Data
+% ------------------------------------------------------------------------------
+\section{Data}\label{sec:data}
+
+\subsection{Source and patients}
+
+The analysis dataset derives from the \texttt{colon} data frame
+distributed with the R \texttt{survival} package~\cite{therneau2026},
+obtained as a CSV file from the Rdatasets mirror and stored in the
+repository under \texttt{data/raw/}. The underlying trial was conducted by
+the NCCTG and reported by Laurie et al.~\cite{laurie1989} and Moertel et
+al.~\cite{moertel1990}. The file stores \emph{two records per patient}: one
+for time-to-recurrence and one for time-to-death, with baseline covariates
+duplicated across the pair. After verifying covariate consistency within
+each patient (all 929 patients passed), the two records were pivoted into a
+single patient-level analysis file of 929 rows.
+
+Patients were randomized 1:1:1 within a single study to observation
+(\texttt{Obs}, $n=315$), levamisole alone (\texttt{Lev}, $n=310$), or
+levamisole plus 5-FU (\texttt{Lev+5FU}, $n=304$) following surgical
+resection. Baseline covariates available for adjustment and prediction
+comprise: age (mean 59.8 years), sex (47.9\% female), obstruction of the
+colon by tumour (19.4\%), perforation (2.9\%), adherence to nearby organs
+(14.5\%), number of positive lymph nodes (median 2, IQR 1--5), tumour
+differentiation (well/moderate/poor), extent of local spread (submucosa
+through contiguous structures), and the surgery-to-registration interval
+category (short/long).
+
+\subsection{Endpoint construction}\label{sec:endpoints}
+
+The published coding defines the \texttt{etype = 1} record as time to
+tumour recurrence, with death before recurrence treated as censoring. In
+the present dataset this coding produces 468 recurrences and, notably, 38
+deaths that occur without a preceding recurrence flag at the same visit
+date. Because contemporary adjuvant colorectal trials define DFS as
+recurrence \emph{or} death from any cause, the data-curation module
+constructed three complementary endpoint views:
+
+\begin{enumerate}[leftmargin=1.7em, itemsep=1.5pt, topsep=3pt]
+  \item \textbf{Composite DFS} (primary endpoint): time to first of
+        recurrence or death, whichever occurs first; 506 events (54.5\%).
+  \item \textbf{Overall survival} (secondary endpoint): time to death from
+        any cause; 452 events (48.7\%).
+  \item \textbf{Recurrence with competing events} (sensitivity analyses):
+        cause-coded status with 468 recurrences (cause 1), 38 competing
+        deaths (cause 2), and 423 censored observations, supporting
+        Aalen--Johansen estimation and Fine--Gray subdistribution
+        modelling.
+\end{enumerate}
+
+Cross-endpoint consistency checks confirmed that the recurrence time never
+exceeds the death time and that all 38 competing deaths occur exactly at
+their death dates. Follow-up is substantial: the median follow-up among
+censored patients, estimated by reverse Kaplan--Meier, is 6.4 years, and
+the maximum observed time is 9.1 years.
+
+\subsection{Missing data and imputation}
+
+Two adjustment covariates contain missing values: the number of positive
+lymph nodes (18 patients, 1.9\%) and tumour differentiation (23 patients,
+2.5\%); 95.6\% of patients are complete cases. Following White and
+Royston's recommendation for survival outcomes~\cite{white2009}, missing
+covariates were imputed by fully conditional specification (chained
+equations) using the \texttt{mice} package~\cite{mice2011} with $m=20$
+imputations, including the Nelson--Aalen cumulative hazard estimate and
+the event indicator of the relevant endpoint in each imputation model so
+that the imputation is compatible with the subsequent Cox analysis. A
+plausibility check comparing observed and imputed distributions showed
+modest and clinically reasonable differences (mean imputed nodes 3.3 vs.\
+observed 3.7), and pooled estimates were
+contrasted against complete-case results throughout
+(Section~\ref{sec:res-tx}).
+
+\subsection{Baseline balance}
+
+Randomization produced well-balanced arms. Across eleven baseline
+variables, the only nominal imbalance was sex (53.6\% female in
+\texttt{Lev+5FU} vs.\ 47.3\% in \texttt{Obs}; three-arm global exact
+test $p=0.027$, pairwise $p=0.13$), which is unremarkable in the context
+of eleven simultaneous tests and does not survive multiplicity
+correction. Pairwise standardized mean differences
+(Figure~\ref{fig:smd}) never exceeded $|0.216|$, and the overall picture
+is consistent with adequate randomization concealment.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_smd_loveplot.pdf}
+  \caption{Baseline covariate balance across randomized arms, measured by
+  absolute standardized mean differences (SMD). Dashed lines mark the
+  conventional $|\mathrm{SMD}|=0.10$ threshold. All pairwise comparisons
+  between arms are shown.}
+  \label{fig:smd}
+\end{figure}

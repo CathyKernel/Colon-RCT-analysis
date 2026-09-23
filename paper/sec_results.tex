@@ -1,0 +1,742 @@
+% ------------------------------------------------------------------------------
+% 4 Results
+% ------------------------------------------------------------------------------
+\section{Results}\label{sec:results}
+
+\subsection{Treatment effects on disease-free and overall survival}
+\label{sec:res-tx}
+
+\subsubsection*{Kaplan--Meier analysis}
+
+Figures~\ref{fig:km} and~\ref{fig:kmos} display Kaplan--Meier estimates
+for the composite DFS endpoint and for overall survival, each with the
+numbers at risk. The three curves separate early and the separation
+widens over the first three years, driven almost entirely by the
+levamisole-plus-5-FU arm. The overall log-rank test is highly
+significant for DFS ($\chi^2 = 21.0$ on 2 degrees of freedom,
+$p < 0.001$); pairwise comparisons show that levamisole alone is
+indistinguishable from observation (HR $0.968$, $p = 0.76$), whereas
+levamisole plus 5-FU is superior to both observation (HR $0.623$,
+$p < 0.001$) and to levamisole alone ($p < 0.001$). The pattern for
+overall survival is similar but attenuated (adjusted HR $0.688$, 95\% CI
+$0.544$--$0.871$), consistent with post-recurrence salvage therapies
+diluting survival differences.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig_km_dfs.pdf}
+  \caption{Kaplan--Meier estimates of the composite disease-free
+  survival endpoint (primary) with pointwise 95\% confidence bands and
+  numbers at risk.}
+  \label{fig:km}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig_km_os.pdf}
+  \caption{Kaplan--Meier estimates of overall survival (secondary
+  endpoint) with pointwise 95\% confidence bands and numbers at risk.}
+  \label{fig:kmos}
+\end{figure}
+
+\subsubsection*{Cox models}
+
+Table~\ref{tab:cox} assembles the treatment-effect estimates across
+specifications. Adjustment for the ten baseline covariates, pooled over
+20 multiple imputations by Rubin's rules, moves the primary contrast
+only marginally (unadjusted HR $0.623$ vs.\ adjusted $0.621$), as
+expected under randomization with balanced arms; the complete-case
+analysis agrees closely. The adjusted covariate effects themselves
+(Figure~\ref{fig:forest}) are clinically coherent: each additional
+positive lymph node multiplies the hazard by $1.08$ (95\% CI
+$1.06$--$1.10$), spread to contiguous structures triples the hazard
+relative to submucosal involvement (HR $3.19$, 95\% CI $1.32$--$7.75$),
+obstruction raises it by 25\%, and a long surgery-to-registration
+interval is protective in this cohort (HR $0.76$, 95\% CI $0.62$--$0.92$).
+
+\begin{table}[htbp]
+\centering\small
+\caption{Treatment-effect estimates for the composite DFS endpoint
+across analysis specifications. The Fine--Gray model targets the
+recurrence endpoint with death without recurrence as a competing event.}
+\label{tab:cox}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l l c c c}
+\toprule
+Analysis & Contrast & HR & 95\% CI & $p$ \\
+\midrule
+Unadjusted Cox & Lev vs.\ Obs & 0.968 & 0.790--1.187 & 0.757 \\
+Unadjusted Cox & Lev+5FU vs.\ Obs & 0.623 & 0.499--0.777 & $<0.001$ \\
+Adjusted Cox, MI ($m=20$) & Lev vs.\ Obs & 0.947 & 0.770--1.165 & 0.607 \\
+Adjusted Cox, MI ($m=20$) & Lev+5FU vs.\ Obs & \textbf{0.621} & \textbf{0.496--0.776} & $<0.001$ \\
+Adjusted Cox, MI (OS endpoint) & Lev+5FU vs.\ Obs & 0.688 & 0.544--0.871 & 0.002 \\
+Fine--Gray subdistribution & Lev+5FU vs.\ Obs & 0.596 & 0.469--0.756 & $<0.001$ \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_forest_adjusted.pdf}
+  \caption{Adjusted hazard ratios for disease-free survival from the
+  multiply imputed Cox model (log scale). Red indicates estimates whose
+  95\% confidence interval excludes 1.}
+  \label{fig:forest}
+\end{figure}
+
+\subsubsection*{Absolute benefit}
+
+Five-year Kaplan--Meier DFS probabilities were 42.4\% (95\% CI
+36.9--47.8) under observation, 44.2\% (38.6--49.6) under levamisole,
+and 59.2\% (53.4--64.5) under levamisole plus 5-FU; the corresponding
+overall-survival probabilities were 52.6\%, 53.5\%, and 63.4\%. The
+bootstrap 95\% CI for the five-year DFS risk difference of levamisole
+plus 5-FU against observation is $-16.7$ percentage points ($-24.2$ to
+$-9.4$), corresponding to a number needed to treat of six patients to
+prevent one additional DFS event at five years. Levamisole alone shows
+no detectable absolute benefit ($-1.8$ points, $-9.3$ to $+5.7$).
+
+\subsubsection*{Proportional-hazards diagnostics}
+
+The scaled Schoenfeld-residual analysis flags two covariates: tumour
+differentiation ($p < 0.001$) and obstruction ($p = 0.008$), with a
+significant global test ($\chi^2 = 42.2$, 14 df, $p < 0.001$).
+Reassuringly, the treatment indicator itself shows no evidence of a
+time-varying effect ($p = 0.51$), so the primary hazard-ratio summary is
+defensible. Figure~\ref{fig:zph} shows the residual patterns; the
+obstruction effect visibly weakens after year two. Replacing linear age
+and nodes with 4-degree-of-freedom penalized splines significantly
+improves the log-likelihood (likelihood-ratio $p < 0.001$) without
+affecting the treatment estimate.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig_zph.pdf}
+  \caption{Proportional-hazards diagnostics: scaled Schoenfeld
+  residuals with loess smooths for treatment, positive nodes, and
+  obstruction (which exhibits a significant violation, $p = 0.008$).}
+  \label{fig:zph}
+\end{figure}
+
+\subsubsection*{Competing-risk sensitivity analysis}
+
+Thirty-eight patients died without a recorded recurrence, and treating
+these deaths as censoring---as the published coding does---formally
+assumes they carry no recurrence-risk information. The competing-risk
+view shows the practical consequence (Figure~\ref{fig:cif}): the
+Aalen--Johansen cumulative incidence of recurrence sits below the naive
+one-minus-Kaplan--Meier curve for every arm, with the gap reaching about
+one percentage point at eight years in the observation arm. The
+Fine--Gray subdistribution model estimates the levamisole-plus-5-FU
+effect on the recurrence subdistribution hazard at $0.596$ (95\% CI
+$0.469$--$0.756$)---virtually identical to the cause-specific reading of
+$0.623$---so the conclusion of a substantial treatment benefit is robust
+to the endpoint-definition choice.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_cif.pdf}
+  \caption{Cumulative incidence of recurrence: Aalen--Johansen
+  estimates treating death without recurrence as a competing event
+  (solid) versus the naive one-minus-Kaplan--Meier estimator that
+  censors such deaths (dashed).}
+  \label{fig:cif}
+\end{figure}
+
+\subsubsection*{Restricted mean survival time}
+
+The RMST analysis restates the benefit in time units without any
+proportional-hazards assumption (Table~\ref{tab:rmst},
+Figure~\ref{fig:rmst}). Within a five-year horizon, patients randomized
+to levamisole plus 5-FU can expect 3.57 disease-free years on average
+versus 2.94 under observation---a gain of 0.63 years (95\% CI 0.33 to
+0.92), roughly seven and a half months, with an RMST ratio of 1.21
+(1.11 to 1.33). The gain widens with the horizon, reaching 1.13 years
+(0.62 to 1.65) by eight years as the curves continue to separate. The
+covariate-adjusted pseudo-observation regression yields 0.57 years
+(0.28 to 0.85), closely agreeing with the unadjusted estimate---as it
+must, because the RMST difference, unlike the hazard ratio, is
+collapsible: covariate adjustment changes precision, not the estimand.
+Within the obstruction stratum---the covariate with the strongest
+proportional-hazards violation ($p = 0.008$)---the five-year RMST
+difference remains substantial (0.60 years, 0.27 to 0.94, without
+obstruction; 0.83 years, 0.11 to 1.55, with obstruction), confirming
+that the treatment conclusion does not rest on the proportional-hazards
+assumption.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Restricted mean survival time for the primary comparison
+(Lev+5FU vs.\ observation, DFS endpoint). Difference $=$ disease-free
+years gained; percentile bootstrap CIs (2{,}000 resamples).}
+\label{tab:rmst}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} c c c c c}
+\toprule
+Horizon $\tau$ & RMST Obs (y) & RMST Lev+5FU (y) & Difference (95\% CI) & Ratio (95\% CI) \\
+\midrule
+3 & 2.03 & 2.34 & 0.31 (0.14--0.47) & 1.15 (1.07--1.24) \\
+4 & 2.50 & 2.96 & 0.46 (0.23--0.68) & 1.18 (1.09--1.29) \\
+5 & 2.94 & 3.57 & \textbf{0.63 (0.33--0.92)} & 1.21 (1.11--1.33) \\
+6 & 3.36 & 4.14 & 0.79 (0.42--1.15) & 1.23 (1.12--1.37) \\
+7 & 3.75 & 4.70 & 0.95 (0.51--1.39) & 1.25 (1.13--1.40) \\
+8 & 4.12 & 5.24 & 1.13 (0.62--1.65) & 1.27 (1.14--1.43) \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_rmst.pdf}
+  \caption{Restricted mean survival time analysis. Left: the RMST is the
+  shaded area under the Kaplan--Meier curve up to the horizon $\tau = 5$
+  years (shown for the observation arm). Right: RMST difference
+  (disease-free years gained with levamisole plus 5-FU) with 95\%
+  bootstrap confidence intervals as a function of the horizon.}
+  \label{fig:rmst}
+\end{figure}
+
+\subsection{Subgroups, trial redesign, and re-enacted monitoring}
+\label{sec:res-design}
+
+\subsubsection*{Subgroup analyses}
+
+Figure~\ref{fig:subgroup} presents the seven pre-specified subgroup
+analyses for the primary contrast. The hazard ratio is remarkably stable
+across subgroups---every point estimate lies between $0.46$ and $0.81$
+and every confidence interval overlaps the overall estimate of $0.62$.
+Only one nominal interaction reaches $p<0.05$: sex (interaction
+$p = 0.043$), with a substantially larger effect in men (HR $0.46$,
+95\% CI $0.33$--$0.64$) than in women (HR $0.79$, 95\% CI $0.58$--$1.07$).
+Against the Bonferroni-adjusted threshold of $0.0071$ appropriate for
+seven tests, this signal does not survive, and no biological mechanism
+has been established for sex-specific efficacy of 5-FU-based regimens in
+this setting. The honest reading is \emph{consistent relative effect
+across all examined subgroups}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig_subgroup_forest.pdf}
+  \caption{Pre-specified subgroup analyses for disease-free survival,
+  levamisole plus 5-FU versus observation. Right column: hazard ratios
+  with 95\% CIs and interaction-test $p$-values (adjusted for nodal
+  count).}
+  \label{fig:subgroup}
+\end{figure}
+
+\subsubsection*{The redesigned trial}
+
+Table~\ref{tab:design} summarizes the fixed design and the
+group-sequential redesign. For the target hazard ratio of $0.65$ at
+one-sided $\alpha = 0.025$ with 90\% power, the fixed design requires
+226 DFS events (approximately 322 patients under the assumed accrual and
+follow-up). The three-look sequential design inflates the maximum to 235
+events but compensates with expected savings whenever the effect is real
+or absent. The O'Brien--Fleming efficacy boundary is naturally
+conservative early ($Z = 2.963$ at the first interim) and relaxes toward
+$2.014$ at the final analysis; the non-binding futility boundary starts
+at $Z = 0.079$, meaning a first look with essentially no observed trend
+would trigger the futility signal. Power falls steeply for weaker
+effects: at $\hr = 0.80$, nearly 850 events would be required---a useful
+reminder of why ambitious trials with modest expected effects grow so
+large.
+
+\begin{table}[htbp]
+\centering\footnotesize
+\caption{The redesigned group-sequential trial: boundaries and operating
+characteristics from \texttt{gsDesign}. Efficacy uses O'Brien--Fleming
+alpha-spending; futility uses a non-binding Hwang--Shih--DeCani
+beta-spending ($\gamma = -4$).}
+\label{tab:design}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c c c c}
+\toprule
+Analysis & Events & Effic.\ $Z$ & 1-sided $p$ & HR at bound & Futil.\ $Z$ & HR at bound \\
+\midrule
+Interim 1 (50\%)  & 118 & 2.963 & 0.0015 & 0.579 & 0.078 & 0.986 \\
+Interim 2 (75\%)  & 177 & 2.359 & 0.0091 & 0.701 & 1.006 & 0.859 \\
+Final (100\%)     & 235 & 2.014 & 0.0220 & 0.769 & 2.014 & 0.769 \\
+\midrule
+\multicolumn{7}{@{}l@{}}{\emph{Design-theoretic probabilities:}
+$P(\text{reject} \mid \mathrm{HR}=0.65) = 0.900$;\;
+$P(\text{reject} \mid \mathrm{HR}=1) = 0.024$ (futility adhered)} \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_gs_boundaries.pdf}
+  \caption{Group-sequential boundaries of the redesigned trial on the
+  $Z$ scale (left axis) and one-sided $p$-value scale (right axis).
+  Red: efficacy (O'Brien--Fleming spending); blue: non-binding
+  futility (Hwang--Shih--DeCani).}
+  \label{fig:gsbound}
+\end{figure}
+
+\subsubsection*{Re-enacting interim monitoring on the real data}
+
+The most striking result of this re-analysis emerges when the redesigned
+monitoring plan is applied to the \emph{actual} event stream. Censoring
+every patient's follow-up at the time at which the 118th DFS event was
+observed (information fraction 50\%) and refitting the two-arm Cox model
+yields an interim hazard ratio of $0.52$ and a $Z$-statistic of
+$3.38$---\emph{above the efficacy boundary of $2.963$}
+(Figure~\ref{fig:reenact}). Under the redesign, the trial would have
+stopped at the first interim analysis and declared the levamisole plus
+5-FU regimen superior to observation, after only 118 of the 506 events
+that were eventually observed. Conditional power calculations quantify
+how decisive this interim result is: the probability of eventually
+crossing the final boundary is 70.6\% even under the null, 99.8\% under
+the design alternative, and essentially 100\% if the observed interim
+trend persists. A cross-check with \texttt{gsDesign}'s conditional-power
+machinery returns somewhat higher values ($0.834$ and $0.999$ under the
+null and alternative), because it accumulates the crossing probabilities
+at \emph{both} remaining analyses with boundaries re-optimized after the
+interim, whereas the hand-rolled calculation uses a single-look normal
+approximation to the final analysis only. The contrast with the Bayesian
+view is instructive: sequential posterior probabilities under the
+skeptical prior (Section~\ref{sec:res-bayes}) would have signalled
+benefit even earlier, at the 25\% information look.
+
+Two interpretive cautions apply. First, the historical trial was not
+designed with this monitoring plan, so the re-enactment is a
+counterfactual exercise, not a critique of the original conduct; its
+message is about how much evidence was already present early in the
+event stream. Second, the interim hazard ratio of $0.52$ is more extreme
+than the final estimate of $0.62$, a reminder that early random highs in
+$Z$ are partly regression artefacts; the design's conservative early
+boundary exists precisely to price this randomness in.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_gs_reenactment.pdf}
+  \caption{Re-enacted interim monitoring using the real trial data.
+  The observed interim result after 118 events (HR $0.52$, $Z = 3.38$,
+  green marker) crosses the O'Brien--Fleming efficacy boundary
+  ($2.96$), so the redesigned trial would have stopped for efficacy at
+  the first interim analysis.}
+  \label{fig:reenact}
+\end{figure}
+
+\subsection{Simulation studies}\label{sec:res-sim}
+
+\subsubsection*{Study A: covariate adjustment buys power}
+
+Table~\ref{tab:simA} and Figure~\ref{fig:simA} report 1{,}000 simulated
+trials per scenario at $n = 322$ and target hazard ratio $0.72$. With no
+prognostic covariates, adjustment neither helps nor hurts, as theory
+predicts: power is 71.6\% unadjusted versus 70.4\% adjusted, and the
+type-I error is 2.5\% and 2.9\% respectively (2.2\% and 3.2\% at full
+strength)---all within Monte Carlo error of the nominal 2.5\%. As
+prognostic strength grows to the trial-calibrated value (SD of the
+prognostic index $0.416$ on the log-hazard scale), adjusted power rises
+to 80.9\% against 72.6\% unadjusted---an efficiency gain equivalent to
+roughly 70 additional events (about a 23\% larger event count), obtained
+at zero cost in bias or type-I error. This is the quantitative case
+behind current regulatory encouragement of pre-specified covariate
+adjustment \citep{fda2023,kahan2014}.
+
+The bias column also teaches a subtler lesson: at full prognostic
+strength, the unadjusted estimator averages $+0.033$ on the log scale
+relative to the data-generating conditional hazard ratio---that is, an
+unadjusted marginal HR of about $0.745$ when the conditional truth is
+$0.72$. This attenuation toward the null is the hazard ratio's
+non-collapsibility \citep{martinussen2013}: unlike a linear-model
+coefficient or a risk difference (or, as demonstrated above, the RMST
+difference), the marginal HR changes when strong prognostic covariates
+are removed from the model even without any confounding. It explains why
+adjusted and unadjusted estimates in randomized trials need not
+coincide, and why the near-coincidence of $0.623$ and $0.621$ in our
+real data reflects the modest prognostic strength of the adjustment set
+rather than a mathematical necessity.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Simulation Study A: covariate-adjustment efficiency (1{,}000
+replicates per scenario, $n=322$, one-sided $\alpha=0.025$). Power at
+HR $=0.72$; type-I error at HR $=1$. ``Bias'' contrasts each estimator
+with the conditional log-HR used to generate the data.}
+\label{tab:simA}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l l c c c c}
+\toprule
+Prognostic strength & HR & Power (unadj.) & Power (adj.) & Bias (unadj.) & Bias (adj.) \\
+\midrule
+None (SD $0.000$)     & 1.00 & 0.025 & 0.029 & $-0.006$ & $-0.006$ \\
+Moderate (SD $0.208$) & 1.00 & 0.025 & 0.025 & $+0.004$ & $+0.005$ \\
+Full (SD $0.416$)     & 1.00 & 0.022 & 0.032 & $+0.000$ & $-0.001$ \\
+None (SD $0.000$)     & 0.72 & 0.716 & 0.704 & $+0.000$ & $-0.009$ \\
+Moderate (SD $0.208$) & 0.72 & 0.725 & 0.766 & $+0.012$ & $-0.006$ \\
+Full (SD $0.416$)     & 0.72 & 0.726 & \textbf{0.809} & $+0.033$ & $-0.010$ \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_sim_efficiency.pdf}
+  \caption{Simulation Study A: empirical power of the unadjusted versus
+  covariate-adjusted Cox test as a function of prognostic strength
+  (target HR $0.72$, $n = 322$, 1{,}000 replicates per scenario).}
+  \label{fig:simA}
+\end{figure}
+
+\subsubsection*{Study B: operating characteristics of the sequential
+design}
+
+Simulating the full monitoring procedure (3{,}000 trials per scenario,
+event-triggered looks with calendar-time censoring) validates the design
+and quantifies the value of the futility boundary
+(Table~\ref{tab:simB}, Figure~\ref{fig:simB}). Under the alternative
+(HR $0.65$), the design rejects in 82.9\% of trials against the
+design-theoretic 90\%. Three mechanisms account for the shortfall, all
+instructive. First, the simulated primary analysis is the
+\emph{unadjusted} Cox test, whose target is the marginal hazard
+ratio---attenuated toward the null by the strong calibration covariates
+through exactly the non-collapsibility quantified in Study A. Second,
+futility adherence stops 6.8\% of trials under the alternative that
+might eventually have crossed. Third, event-triggered looks with
+discrete calendar-time cuts approximate, but do not reproduce, the
+continuous information accrual assumed by the spending functions.
+Stopping is dominated by the second interim (42.2\%) rather than the
+first (18.6\%), and the expected event count is 183.4 versus 235 at
+completion: the design saves, on average, 51.6 events (roughly 22\%)
+when the drug works. Under the null with futility adhered to, the type-I
+error is 2.4\% and the trial stops for futility at the first interim in
+54.9\% of cases. Ignoring futility (the non-binding option) inflates the
+type-I error only trivially, to 2.7\%, confirming the design's stated
+robustness.
+
+\begin{table}[htbp]
+\centering\footnotesize
+\caption{Simulation Study B: simulated operating characteristics of the
+group-sequential design (3{,}000 trials per scenario).}
+\label{tab:simB}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c c c c}
+\toprule
+Scenario & Eff.\ IA1 & Eff.\ IA2 & Final & Total eff. & Exp.\ events & Events saved \\
+\midrule
+HR $=0.65$ (as designed)   & 0.186 & 0.422 & 0.222 & \textbf{0.829} & 183.4 & 51.6 \\
+HR $=1$, futility adhered  & 0.002 & 0.008 & 0.014 & 0.024 & 152.7 & 82.4 \\
+HR $=1$, futility ignored  & 0.001 & 0.009 & 0.017 & 0.027 & 234.4 & 0.6 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig_sim_gs_oc.pdf}
+  \caption{Simulation Study B: simulated stopping probabilities by
+  analysis and reason under the alternative (right) and under the null
+  with futility adherence (left).}
+  \label{fig:simB}
+\end{figure}
+
+\subsubsection*{Study C: interval estimation under non-proportional
+hazards}
+
+When the true effect is time-varying (HR $0.45$ in year one, weakening
+to $0.80$ thereafter) and the analysis fits a single
+proportional-hazards Cox model, the estimator targets a weighted average
+of the two regimes (simulation estimand: log-HR $= -0.407$, i.e.\ a
+pooled HR of about $0.666$). Over 500 replicates, the Wald interval
+achieved 92.6\% coverage of this estimand and the percentile bootstrap
+90.4\%---both marginally below their nominal 95\%
+(Table~\ref{tab:simC}). The bootstrap is slightly narrower (mean width
+$0.434$ vs.\ $0.443$) but not more accurate. The lesson is double-edged:
+neither standard interval collapses under moderate non-proportional
+hazards---the practical damage is a shifted estimand rather than
+drastically wrong uncertainty---yet the modest undercoverage confirms
+that misspecification costs are real, reinforcing the value of the
+diagnostics and of the RMST analysis of Section~\ref{sec:res-tx}.
+
+\begin{table}[htbp]
+\centering\footnotesize
+\caption{Simulation Study C: 95\% interval performance under a
+time-varying hazard ratio (500 replicates, $n=335$; 100 bootstrap
+resamples per replicate).}
+\label{tab:simC}
+\begin{tabular*}{0.80\textwidth}{@{\extracolsep{\fill}} l c c c}
+\toprule
+Method & Coverage & Mean width & Mean log-HR \\
+\midrule
+Cox Wald CI            & 0.926 & 0.443 & $-0.407$ \\
+Bootstrap percentile & 0.904 & 0.434 & $-0.407$ \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_sim_coverage.pdf}
+  \caption{Simulation Study C: Wald versus bootstrap percentile
+  intervals for the log hazard ratio across 500 simulated trials under
+  a time-varying true effect. The dashed line marks the simulation
+  estimand.}
+  \label{fig:simC}
+\end{figure}
+
+\subsection{Machine-learning prediction and Bayesian inference}
+\label{sec:res-ml}
+
+\subsubsection*{Cross-validated prediction performance}
+
+Table~\ref{tab:ml} and Figure~\ref{fig:mlcv} compare the five prognostic
+models over 25 cross-validation folds (888 complete cases). The random
+survival forest achieves the best discrimination (cross-validated
+$C = 0.646$, IPCW AUC at five years $0.677$) and the lowest integrated
+Brier score ($0.217$ over years 1--5), ahead of the clinical Cox model
+($C = 0.634$), gradient boosting ($0.633$), XGBoost ($0.625$), and the
+elastic-net Cox model ($0.620$). The spread among models is
+modest---about 0.026 in the $C$-index---and the honest uncertainty
+(fold-to-fold SD $\approx 0.025$) cautions against declaring a
+definitive winner; what the comparison really shows is that, with ten
+baseline covariates and $\sim$300 events, flexible learners extract only
+a little more signal than a well-specified clinical model.
+
+The apparent-versus-cross-validated contrast in Table~\ref{tab:ml}
+quantifies overfitting: XGBoost's apparent $C$ of $0.741$ drops to
+$0.625$ under honest validation, a 0.12 optimism gap, versus a 0.07 gap
+for the random forest and essentially none for the clinical Cox model.
+This gap is the single most important column in the table---it is the
+difference between the performance one would report from a naive
+in-sample fit and the performance a new patient would actually
+experience. Calibration of the winning model
+(Figure~\ref{fig:mlcal}) is satisfactory across the risk spectrum:
+within deciles of predicted five-year risk, the mean predicted risk
+tracks the Kaplan--Meier observed risk within $6.5$ percentage points.
+Permutation importance is dominated by the positive lymph-node count
+(mean $C$-index drop $0.117$ per permutation, an order of magnitude
+above every other covariate), followed at a distance by advanced local
+extent, female sex, and a long surgery-to-registration interval---a
+ranking that mirrors the adjusted Cox effects of Figure~\ref{fig:forest}
+and reinforces the clinical coherence of the learned model.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Machine-learning prediction of the composite DFS endpoint
+(888 complete cases; $5\times5$-fold stratified cross-validation).
+Treatment excluded from all predictors. AUC at five years is IPCW
+weighted; IBS is the integrated Brier score over years 1--5.}
+\label{tab:ml}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c c}
+\toprule
+Model & CV $C$-index & CV AUC (5y) & CV IBS & Apparent $C$ \\
+\midrule
+Random survival forest         & \textbf{0.646} & \textbf{0.677} & \textbf{0.217} & 0.713 \\
+Clinical Cox (main effects)    & 0.634 & 0.652 & 0.222 & 0.651 \\
+Gradient boosting (Cox loss)   & 0.633 & 0.662 & 0.225 & 0.717 \\
+XGBoost (Cox objective) & 0.625 & -- & -- & 0.741 \\
+Elastic-net Cox                & 0.620 & 0.646 & 0.226 & 0.628 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_ml_cv_performance.pdf}
+  \caption{Cross-validated discrimination by model. Left: distribution
+  of the $C$-index across 25 folds. Right: IPCW AUC at five years with
+  cross-validation standard errors.}
+  \label{fig:mlcv}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_ml_calibration_auc.pdf}
+  \caption{Discrimination and calibration of the random survival
+  forest. Left: ROC curve for five-year event classification. Right:
+  predicted versus Kaplan--Meier observed five-year event risk by decile
+  of predicted risk.}
+  \label{fig:mlcal}
+\end{figure}
+
+\subsubsection*{Bayesian re-analysis: priors and posteriors}
+\label{sec:res-bayes}
+
+The Weibull model converged cleanly under all three prior scenarios
+(two chains, target acceptance $0.9$; $\hat R \approx 1.00$ throughout).
+Table~\ref{tab:bayes} and Figure~\ref{fig:bayesprior} display the
+central result: the posterior hazard ratio is essentially insensitive to
+the prior, ranging only from $0.591$ (weakly-informative) to $0.610$
+(skeptical). Under the skeptical prior---which places 95\% of its mass
+between hazard ratios of about $0.44$ and $2.28$ and only 5\% below
+$0.5$---the posterior mean is $0.610$ with 95\% credible interval
+$0.485$--$0.757$, $\Prob(\mathrm{HR}<1) = 1.000$ to three decimals, and
+$\Prob(\mathrm{HR}<0.8) = 0.994$. The data are simply strong enough to
+overwhelm any of the three priors, which is itself an informative
+finding: conclusions of substance do not require prior consensus.
+
+\begin{table}[htbp]
+\centering\footnotesize
+\caption{Bayesian Weibull analysis of the primary contrast under three
+prior specifications (2 chains; 4{,}000 posterior draws each), with the
+frequentist adjusted estimate for comparison.}
+\label{tab:bayes}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c c c}
+\toprule
+Prior & Mean (log-HR) & Post.\ HR & 95\% CrI & $\Prob(\mathrm{HR}{<}1)$ & $\Prob(\mathrm{HR}{<}0.8)$ \\
+\midrule
+Skeptical $\mathcal{N}(0,\,0.421^2)$          & $0$        & 0.610 & 0.485--0.757 & 1.000 & 0.994 \\
+Weakly-inf.\ $\mathcal{N}(0,\,1)$       & $0$        & 0.591 & 0.466--0.738 & 1.000 & 0.997 \\
+Enthusiastic $\mathcal{N}(\log 0.65,\,0.421^2)$ & $-0.431$ & 0.592 & 0.474--0.734 & 1.000 & 0.997 \\
+Frequentist (adj.\ Cox, MI) [ref.] & -- & 0.621 & 0.496--0.776 & -- & -- \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_bayes_priors.pdf}
+  \caption{Prior sensitivity of the Bayesian treatment-effect
+  estimate. Left: the three prior densities on the hazard-ratio
+  scale. Right: the corresponding posterior densities, with the
+  frequentist point estimate (dotted) for reference.}
+  \label{fig:bayesprior}
+\end{figure}
+
+\subsubsection*{Bayesian sequential monitoring}
+
+Figure~\ref{fig:bayesseq} replays evidence accumulation under the
+skeptical prior at four event-driven looks. By the 25\% look (79
+events), the posterior mean hazard ratio is already $0.601$ with
+$\Prob(\mathrm{HR}<1) = 0.998$ and a credible interval excluding 1
+(upper bound $0.88$); from the 50\% look (158 events) onward the
+probability is essentially 1. Under the common Bayesian monitoring rule
+of stopping when $\Prob(\mathrm{HR}<1)$ exceeds $0.975$, this trial
+would have stopped at the \emph{first quarter} of the evidence---even
+earlier than the frequentist group-sequential re-enactment of
+Section~\ref{sec:res-design}, which required 50\% of the information and
+a much larger $Z$. The contrast is partly definitional (the Bayesian
+posterior probability does not pay a multiplicity price for looks) and
+partly prior-driven (the skeptical prior pulls toward the null early
+on, making its rapid crossing more impressive); both mechanisms deserve
+emphasis when Bayesian designs are proposed as replacements for
+alpha-spending.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_bayes_sequential.pdf}
+  \caption{Bayesian sequential monitoring under the skeptical prior.
+  Left: posterior mean hazard ratio with 95\% credible intervals at
+  each look. Right: the monitoring statistic $\Prob(\mathrm{HR}<1)$
+  against the 0.975 stopping threshold.}
+  \label{fig:bayesseq}
+\end{figure}
+
+\subsubsection*{Model criticism}
+
+The posterior predictive check (Figure~\ref{fig:bayesppc}) replicates
+the control arm's Kaplan--Meier curve from 100 posterior draws: the
+observed curve lies comfortably within the 95\% posterior predictive
+band throughout follow-up, with no systematic deviation in the tail
+where a poorly specified baseline hazard would typically betray itself.
+Approximate leave-one-out cross-validation strongly prefers the Weibull
+baseline over the exponential special case (ELPD difference $-18.0$, all
+stacking weight on the Weibull), and the posterior shape parameter
+$\alpha = 0.765$ (95\% CrI $0.695$--$0.837$) confirms a genuinely
+decreasing baseline hazard---patients who survive the first two years
+have progressively lower event rates, exactly as clinical experience
+suggests.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.90\textwidth]{fig_bayes_ppc.pdf}
+  \caption{Posterior predictive check for the control arm: replicated
+  Kaplan--Meier curves from 100 posterior draws versus the observed
+  curve.}
+  \label{fig:bayesppc}
+\end{figure}
+
+\subsection{Heterogeneous treatment effects}\label{sec:res-cate}
+
+\subsubsection*{Average effects on the five-year absolute risk}
+
+Table~\ref{tab:cate} reports the average treatment effect of levamisole
+plus 5-FU versus observation on the five-year DFS event risk, estimated
+three ways on the jackknife pseudo-observations ($n = 594$ complete
+cases). The three estimators agree closely: the unadjusted
+Kaplan--Meier difference is $-16.8$ percentage points (bootstrap 95\%
+CI $-24.5$ to $-9.1$), cross-fitted G-computation gives $-15.3$ points,
+and the doubly robust AIPW estimator gives $-16.2$ points with
+influence-function standard error $3.9$ (95\% CI $-23.9$ to $-8.5$).
+The consistency across a design-free estimator, an outcome-model-based
+estimator, and a doubly robust estimator is exactly what one hopes to
+see in a randomized comparison, and the magnitudes match the
+intention-to-treat analysis of Section~\ref{sec:res-tx}.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Average treatment effect on the five-year DFS event risk
+(negative $=$ risk reduction with levamisole plus 5-FU).}
+\label{tab:cate}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c}
+\toprule
+Estimator & ATE (percentage points) & SE & 95\% CI \\
+\midrule
+Kaplan--Meier difference (bootstrap)   & $-16.8$ & 4.0 & $-24.5$ to $-9.1$ \\
+G-computation (cross-fitted, pseudo-obs) & $-15.3$ & 0.5 & $-16.2$ to $-14.4$ \\
+AIPW (cross-fitted, doubly robust)      & $\mathbf{-16.2}$ & 3.9 & $-23.9$ to $-8.5$ \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\subsubsection*{Conditional effects: where the benefit lives}
+
+The cross-fitted T-learner decomposes this average into patient-level
+predicted benefits (Figure~\ref{fig:catedist}). The distribution is
+wide: predicted five-year risk reductions range from negligible to over
+40 percentage points, with quartile means of $28.9$, $18.6$, $12.6$,
+and $1.1$ points. Crucially, the predicted benefit is strongly tied to
+baseline risk (correlation $0.648$ between control-arm predicted risk
+and predicted benefit): the patients predicted to benefit most are those
+whose disease is most aggressive---high nodal burden, advanced local
+extent---while low-risk patients have little room for absolute
+improvement even under a proportionally constant treatment effect.
+Table~\ref{tab:cateq} sharpens the picture with observed outcomes:
+within the highest predicted-benefit quartile (mean baseline risk
+$71.0\%$), the observed five-year risk difference is $-12.8$ points;
+within the lowest quartile (baseline risk $46.6\%$), it is $-19.3$
+points---statistically compatible with the same relative effect
+everywhere. The apparent paradox (large predicted but modest observed
+benefit in the top quartile, the reverse in the bottom) reflects both
+estimation noise in quartile-specific contrasts (each based on
+$\sim$64--98 events) and the mechanical relationship between baseline
+risk and achievable absolute benefit.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{fig_cate_distribution.pdf}
+  \caption{Predicted absolute benefit of levamisole plus 5-FU at five
+  years. Left: distribution across patients (AIPW average marked).
+  Right: predicted benefit versus predicted baseline risk, coloured by
+  randomized arm.}
+  \label{fig:catedist}
+\end{figure}
+
+\begin{table}[htbp]
+\centering\footnotesize
+\caption{Predicted-benefit quartiles from the cross-fitted T-learner.
+``Predicted benefit'' is the model-implied five-year risk reduction;
+``observed risk difference'' is the corresponding pseudo-observation
+contrast by arm within quartile.}
+\label{tab:cateq}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c c c}
+\toprule
+Quartile & $n$ & Pred.\ benefit (pts) & Baseline risk & Observed\ diff (pts) & Events \\
+\midrule
+Q1 (largest predicted benefit) & 149 & 28.9 & 71.0\% & $-12.8$ & 98 \\
+Q2                             & 148 & 18.6 & 58.2\% & $-16.1$ & 79 \\
+Q3                             & 148 & 12.6 & 52.0\% & $-11.8$ & 72 \\
+Q4 (smallest)                  & 149 & 1.1  & 46.6\% & $-19.3$ & 64 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+The synthesis is the section's key message: in this trial, heterogeneity
+in \emph{absolute} benefit is real and large, but it is driven almost
+entirely by heterogeneity in \emph{baseline risk} rather than by
+qualitative effect modification---consistent with the null interaction
+tests of Section~\ref{sec:res-design}. For clinical decision-making,
+this is the most useful kind of heterogeneity: it means a single
+relative effect, applied to an accurate prognostic model, suffices to
+identify who gains most in absolute terms, with no need to invoke
+distinct treatment-response biology. All such CATE statements remain
+exploratory in a single trial of this size.

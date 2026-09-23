@@ -1,0 +1,107 @@
+% ------------------------------------------------------------------------------
+% 1 Introduction
+% ------------------------------------------------------------------------------
+\section{Introduction}\label{sec:intro}
+
+Colorectal cancer is one of the most common malignancies worldwide, and
+for patients undergoing potentially curative resection the question of
+whether systemic adjuvant chemotherapy should follow surgery remained
+open for much of the twentieth century. The North Central Cancer
+Treatment Group (NCCTG) program addressed this question directly:
+building on an earlier randomized comparison of observation against
+levamisole alone \citep{laurie1989}, the investigators added a third arm
+combining the immunomodulator levamisole with the antimetabolite
+5-fluorouracil (5-FU) \citep{moertel1990}. The combination reduced
+recurrence and mortality substantially and became a standard of care for
+resected stage B/C colon carcinoma. The individual-patient data from
+this program were subsequently contributed to the \texttt{survival}
+package for R \citep{therneau2026}, where they now serve as one of the
+canonical datasets for teaching survival analysis; the version analysed
+here contains 929 patients from a single study.
+
+Re-analyzing an old trial with new methods is more than an academic
+exercise, and five considerations motivated each component of this
+project. First, endpoint definitions and analysis conventions have
+evolved: modern adjuvant colorectal trials define disease-free survival
+(DFS) as the time to recurrence \emph{or} death, whereas the published
+coding of this dataset treats death without recurrence as censoring; a
+rigorous re-analysis must therefore address both views and, importantly,
+the competing-risks consequences of the difference. Second, missing-data
+handling, covariate-adjusted estimation, and absolute-benefit reporting
+have all been refined since the original publications, and regulatory
+guidance now actively encourages pre-specified covariate adjustment in
+the primary analysis of randomized trials
+\citep{fda2023,kahan2014,sterne2009}. Third, the trial-design landscape
+has changed: group-sequential designs with alpha- and beta-spending
+functions are now the default in oncology, and it is natural to ask
+whether this trial---run with a fixed-sample mindset---would have
+stopped early under a modern monitoring plan
+\citep{landemets1983,o1979}. Fourth, machine-learning prediction models
+and Bayesian machinery offer perspectives on prognosis and evidence
+accumulation that complement the classical toolkit
+\citep{harrell2015,gelman2013}. Finally, the modern estimand framework
+and recent methods for heterogeneous treatment effects invite a
+re-examination of \emph{for whom} the benefit is largest
+\citep{hernan2020}.
+
+\subsection*{Contributions}
+
+This paper integrates all of these perspectives into a single coherent,
+fully scripted pipeline and makes the following contributions:
+
+\begin{enumerate}[leftmargin=1.7em, itemsep=2pt, topsep=3pt]
+  \item \textbf{A comprehensive treatment-effect re-estimate} on the
+        composite DFS endpoint, combining multiple imputation,
+        proportional-hazards diagnostics, competing-risk (Aalen--Johansen
+        and Fine--Gray) sensitivity analyses, and absolute-benefit
+        measures---five-year risk differences, numbers needed to treat,
+        and restricted mean survival times (RMST), the latter providing a
+        collapsible, assumption-light summary that directly contrasts
+        with the non-collapsibility of the hazard ratio
+        \citep{royston2011,uno2014}.
+  \item \textbf{A counterfactual trial redesign and monitoring
+        re-enactment}: the trial is re-sized and re-designed as a
+        three-look group-sequential study
+        \citep{o1979,landemets1983,hwang1990}, and the monitoring plan is
+        replayed on the real event stream, showing that a modern design
+        would have stopped the trial for efficacy at the first interim
+        analysis, with conditional-power and Bayesian monitoring
+        cross-checks.
+  \item \textbf{Simulation-calibrated operating characteristics} for the
+        design and analysis choices: the efficiency gain from covariate
+        adjustment (including a direct quantitative demonstration of
+        hazard-ratio non-collapsibility), the type-I error and stopping
+        probabilities of the sequential design, and confidence-interval
+        coverage under non-proportional hazards.
+  \item \textbf{An honest validation study of five survival prediction
+        models} spanning penalized regression, kernel ensembles, and
+        gradient boosting, quantifying the optimism gap between apparent
+        and cross-validated discrimination.
+  \item \textbf{A Bayesian re-analysis} with explicit prior sensitivity
+        (skeptical, weakly-informative, enthusiastic), event-driven
+        sequential monitoring, posterior predictive checks, and
+        baseline-model criticism by approximate leave-one-out
+        cross-validation \citep{vehtari2017}.
+  \item \textbf{A heterogeneous-treatment-effect analysis} on the
+        absolute five-year risk scale, combining jackknife
+        pseudo-observation regression \citep{andersen2003,parner2010},
+        cross-fitted G-computation, and doubly robust AIPW estimation
+        \citep{hernan2020}, which locates the largest absolute benefits
+        in the highest-risk patients.
+\end{enumerate}
+
+Beyond the specific findings, the paper is deliberately
+methods-integrative: every paradigm is applied to the same data, under a
+common adjustment set and common software-engineering discipline (fixed
+seeds, file-based module interfaces, one-command reproduction), so that
+the contrasts between paradigms---collapsible versus non-collapsible
+estimands, alpha-spending versus posterior monitoring, apparent versus
+honest prediction accuracy---are attributable to the methods rather than
+to implementation differences.
+
+The remainder of the paper is organized as follows.
+Section~\ref{sec:data} describes the data and endpoint construction;
+Section~\ref{sec:methods} details all statistical methods;
+Section~\ref{sec:results} presents results in five thematic blocks; and
+Section~\ref{sec:discussion} discusses strengths, limitations, and
+conclusions.
