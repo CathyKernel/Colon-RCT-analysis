@@ -1,0 +1,114 @@
+\documentclass[11pt,a4paper]{article}
+
+% ==============================================================================
+% Re-analysis of the NCCTG Adjuvant Colon Cancer Randomized Trial
+% Author: Cathy -- MSc Biostatistics capstone project
+% Body document (cover generated separately via HTML/Playwright and merged)
+% ==============================================================================
+
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage[export]{adjustbox}   % enables max width / max height keys in \includegraphics
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+
+% hyperref LAST among content packages
+\usepackage[
+    colorlinks=true,
+    linkcolor={blue!55!black},
+    citecolor={gray!30!black},
+    urlcolor={blue!55!black},
+    bookmarks=true,
+    bookmarksnumbered=true,
+    unicode=true
+]{hyperref}
+
+\geometry{a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+% ---- Typography & spacing ----------------------------------------------------
+\widowpenalty=10000
+\clubpenalty=10000
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{0em}
+\setlength{\emergencystretch}{1.5em}
+\renewcommand{\arraystretch}{1.12}
+
+\titleformat{\section}{\Large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{16pt plus 4pt minus 2pt}{7pt plus 2pt}
+\titlespacing*{\subsection}{0pt}{11pt plus 3pt minus 2pt}{5pt plus 1pt}
+
+\captionsetup{font=small, labelfont=bf, skip=5pt}
+
+% ---- Header / footer -----------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\itshape Re-analysis of the NCCTG Adjuvant Colon Cancer Trial}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\headheight}{14pt}
+
+% ---- Convenience macros --------------------------------------------------------
+\newcommand{\hr}{\mathrm{HR}}
+\newcommand{\ci}[1]{(#1)}
+\newcommand{\fiveyr}{5-year}
+\newcommand{\dfsaname}{DFS}
+
+% ---- Figure path ---------------------------------------------------------------
+\graphicspath{{../outputs/figures/}}
+
+% ---- PDF metadata ---------------------------------------------------------------
+\hypersetup{
+    pdftitle={A Modern Biostatistical Re-analysis of the NCCTG Adjuvant Colon Cancer Randomized Trial: Frequentist, Bayesian, and Machine Learning Perspectives},
+    pdfauthor={Cathy},
+    pdfsubject={MSc Biostatistics capstone project -- clinical trial re-analysis},
+    pdfkeywords={colon cancer, randomized clinical trial, survival analysis, Cox model, multiple imputation, group-sequential design, simulation, machine learning, Bayesian inference, treatment heterogeneity},
+    pdfcreator={LaTeX (Tectonic)}
+}
+
+\begin{document}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% Title page: minimal white page with title, author, and date only
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{titlepage}
+    \centering
+    \vspace*{0.28\textheight}
+    {\huge\bfseries A Modern Biostatistical Re-analysis of the\\
+     NCCTG Adjuvant Colon Cancer Randomized Trial\par}
+
+    \vspace{1.6em}
+    {\Large Frequentist, Bayesian, and Machine Learning Perspectives\par}
+
+    \vspace{5em}
+    {\Large Cathy\par}
+
+    \vspace{1.8em}
+    {\large September 2026\par}
+
+    \vfill
+    \vspace*{2.5cm}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\input{sec_abstract}
+\input{sec_intro}
+\input{sec_methods}
+\input{sec_results1}
+\input{sec_results2}
+\input{sec_results3}
+\input{sec_results4}
+\input{sec_results5}
+\input{sec_discussion}
+
+\end{document}
