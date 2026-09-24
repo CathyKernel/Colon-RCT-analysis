@@ -1,0 +1,4 @@
+estimator,ATE_5yr_risk,se,ci_lo,ci_hi
+Kaplan-Meier difference (unadjusted),-0.1675,0.0401,-0.2452,-0.0906
+"G-computation (cross-fitted, pseudo-obs)",-0.153,0.0045,-0.1617,-0.1442
+"AIPW (cross-fitted, doubly robust)",-0.1621,0.0393,-0.2392,-0.085

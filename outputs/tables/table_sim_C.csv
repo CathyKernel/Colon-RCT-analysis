@@ -1,0 +1,3 @@
+"method","mean_logHR","estimand_logHR","empirical_sd","coverage","mean_width"
+"Cox Wald CI",-0.407,-0.407,0.122,0.926,0.443
+"Bootstrap percentile CI",-0.407,-0.407,0.122,0.904,0.434
