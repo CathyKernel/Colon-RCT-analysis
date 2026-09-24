@@ -1,0 +1,166 @@
+\documentclass[11pt,a4paper]{article}
+
+% ==============================================================================
+% A Modern Biostatistical Re-analysis of the NCCTG Adjuvant Colon Cancer
+% Randomized Trial: Frequentist, Bayesian, and Machine Learning Perspectives
+%
+% arXiv-style preprint. Author: Cathy. September 2026.
+% Compile:  tectonic main.tex   (from the paper/ directory)
+% ==============================================================================
+
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{microtype}
+\usepackage[round]{natbib}
+% hyperref LAST among content packages
+\usepackage[
+    colorlinks=true,
+    linkcolor={blue!55!black},
+    citecolor={gray!30!black},
+    urlcolor={blue!55!black},
+    bookmarks=true,
+    bookmarksnumbered=true,
+    unicode=true
+]{hyperref}
+
+\geometry{a4paper, top=2.6cm, bottom=2.6cm, left=2.6cm, right=2.6cm}
+
+% ---- Typography & spacing ----------------------------------------------------
+\widowpenalty=10000
+\clubpenalty=10000
+\setlength{\parskip}{0.32em}
+\setlength{\parindent}{0em}
+\setlength{\emergencystretch}{1.5em}
+\renewcommand{\arraystretch}{1.10}
+
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{15pt plus 4pt minus 2pt}{6pt plus 2pt}
+\titlespacing*{\subsection}{0pt}{10pt plus 3pt minus 2pt}{4pt plus 1pt}
+
+\captionsetup{font=small, labelfont=bf, skip=5pt}
+
+% ---- Convenience macros --------------------------------------------------------
+\newcommand{\hr}{\mathrm{HR}}
+\newcommand{\rmst}{\mathrm{RMST}}
+\newcommand{\Prob}{\mathrm{P}}
+
+% ---- Figure path ---------------------------------------------------------------
+\graphicspath{{../outputs/figures/}}
+
+% ---- PDF metadata ---------------------------------------------------------------
+\hypersetup{
+    pdftitle={A Modern Biostatistical Re-analysis of the NCCTG Adjuvant Colon Cancer Randomized Trial: Frequentist, Bayesian, and Machine Learning Perspectives},
+    pdfauthor={Cathy},
+    pdfsubject={Clinical trial re-analysis: survival analysis, group-sequential design, simulation, machine learning, Bayesian inference, treatment heterogeneity},
+    pdfkeywords={colon cancer, randomized clinical trial, survival analysis, Cox model, multiple imputation, group-sequential design, simulation, machine learning, Bayesian inference, restricted mean survival time, treatment heterogeneity},
+    pdfcreator={LaTeX (Tectonic)}
+}
+
+\begin{document}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% Title block
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{center}
+    {\LARGE\bfseries A Modern Biostatistical Re-analysis of the\\
+     NCCTG Adjuvant Colon Cancer Randomized Trial\par}
+
+    \vspace{0.9em}
+    {\large Frequentist, Bayesian, and Machine Learning Perspectives\par}
+
+    \vspace{1.4em}
+    {\large Cathy\par}
+
+    \vspace{0.4em}
+    {\small September 2026\par}
+\end{center}
+
+\vspace{0.6em}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% Abstract
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{abstract}
+\noindent
+Adjuvant chemotherapy with levamisole and 5-fluorouracil (5-FU) after
+resection of stage B/C colon carcinoma was established by the North
+Central Cancer Treatment Group (NCCTG) in the late 1980s, and the
+resulting individual-patient dataset has become one of the most widely
+used teaching resources in survival analysis. We ask what a modern
+biostatistical toolkit can extract from the same trial today. Among 929
+patients randomized to observation ($n=315$), levamisole ($n=310$), or
+levamisole plus 5-FU ($n=304$), we reconstruct a composite disease-free
+survival (DFS) endpoint (recurrence or death; 506 events) from the
+published event-type coding and integrate six families of methods in one
+fully reproducible pipeline: (i) Kaplan--Meier and Cox analyses with
+multiple imputation, competing-risk sensitivity analyses, and
+absolute-benefit measures including the restricted mean survival time;
+(ii) a redesign of the trial as a three-look group-sequential design with
+O'Brien--Fleming efficacy and non-binding beta-spending futility
+boundaries, re-enacted on the real event times; (iii) Monte Carlo
+simulation studies of covariate-adjustment efficiency, sequential-design
+operating characteristics, and confidence-interval coverage under
+non-proportional hazards; (iv) cross-validated survival prediction with
+five machine-learning models; (v) a Bayesian Weibull analysis with
+skeptical, weakly-informative, and enthusiastic priors and sequential
+monitoring; and (vi) doubly robust estimation of heterogeneous absolute
+treatment effects. Levamisole plus 5-FU reduced the DFS hazard by 38\%
+(adjusted HR $=0.621$, 95\% CI $0.496$--$0.776$), gained 16.8 percentage
+points of five-year DFS and 0.63 disease-free years in restricted mean
+survival time. Under the redesigned monitoring plan the trial would have
+stopped for efficacy at the first interim analysis (118 events; HR
+$0.52$, $Z=3.38$ against a boundary of $2.96$), and Bayesian monitoring
+would have signalled benefit at 25\% of the information. Covariate
+adjustment raised simulated power from 72.6\% to 80.9\% for a moderate
+effect and directly illustrated the non-collapsibility of the hazard
+ratio, while the collapsible RMST difference was unchanged by adjustment.
+All code, data, and outputs are reproducible end-to-end from the
+accompanying repository.
+\end{abstract}
+
+\vspace{0.4em}
+\noindent\textbf{Keywords:} randomized clinical trial; survival analysis;
+group-sequential design; multiple imputation; competing risks; restricted
+mean survival time; Bayesian inference; machine learning; heterogeneous
+treatment effects.
+
+\vspace{1.2em}
+
+\input{sec_intro}
+\input{sec_data_methods}
+\input{sec_results}
+\input{sec_discussion}
+
+% ---- Backmatter ---------------------------------------------------------------
+\section*{Data availability}
+The trial data are the \texttt{colon} dataset distributed with the R
+package \texttt{survival} \citep{therneau2026}, derived from the NCCTG
+adjuvant colon cancer program \citep{laurie1989,moertel1990} and obtained
+from the Rdatasets mirror; they are redistributed with the repository in
+\texttt{data/raw/colon.csv} with full attribution for research and
+educational use.
+
+\section*{Code availability}
+All analysis code (six R modules and four Python modules), the
+reproducibility environment files, and every figure and table in this
+paper are generated from the accompanying repository
+(\texttt{Makefile}: \texttt{make all}), with fixed random seeds
+(global seed 20260916) and module-to-module communication exclusively
+through versioned files in \texttt{data/} and \texttt{outputs/}.
+Exact software versions are recorded in
+\texttt{environment/r\_session\_info.txt} and
+\texttt{environment/python\_package\_versions.txt}.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

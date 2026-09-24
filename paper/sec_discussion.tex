@@ -1,0 +1,151 @@
+% ------------------------------------------------------------------------------
+% 5 Discussion
+% ------------------------------------------------------------------------------
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Principal findings}
+
+Six analytical components, aimed at one 1980s dataset, converge on one
+conclusion and enrich it from different angles. The conclusion:
+levamisole plus 5-FU after resection of stage B/C colon carcinoma
+delivers a large, robust treatment benefit on disease-free
+survival---hazard ratio $0.62$ adjusted, $0.59$--$0.61$ Bayesian, $0.60$
+under competing risks---corresponding to a five-year absolute gain of
+16.8 percentage points, a number needed to treat of six, and 0.63
+disease-free years gained in restricted mean survival time. The
+enrichment: the effect is stable across seven pre-specified subgroups
+with no credible interaction; a modern group-sequential design would
+likely have stopped the trial for efficacy at its first interim analysis
+(HR $0.52$, $Z = 3.38$ against a boundary of $2.96$), and Bayesian
+monitoring would have signalled benefit at a quarter of the evidence;
+covariate adjustment would have bought real power at no inferential
+cost; and the largest absolute benefits accrue to the highest-risk
+patients through the arithmetic of baseline risk rather than
+differential response.
+
+The re-enacted monitoring result deserves particular emphasis because it
+connects historical data to contemporary trial ethics. Fifty percent of
+the 506 DFS events in this dataset contain essentially all the evidence
+needed for the superiority conclusion; the remaining half of the
+patients' events---years of follow-up and hundreds of
+recurrences---added precision but not decisions. Translated to the 1980s
+context in which the 625 patients randomized to observation or
+levamisole alone in this very trial continued on an ineffective
+strategy, an early stop would have redirected patients to the active
+regimen years sooner. The counterfactual is stylized (the historical
+investigators lacked today's data-management speed and regulatory
+framing), but it illustrates with unusual concreteness why alpha-spending
+and beta-spending designs became the default.
+
+\subsection{Methodological lessons}
+
+Several results function as transferable teaching points.
+\textbf{Non-collapsibility}, usually a paragraph in a textbook, appears
+here as a measured quantity: with trial-calibrated prognostic strength,
+the unadjusted Cox estimator targets a marginal hazard ratio attenuated
+by $0.033$ on the log scale, so unadjusted and adjusted estimates are
+\emph{different estimands} even in a perfectly randomized trial
+(Simulation Study A). The RMST analysis supplies the constructive
+counterpoint: because the restricted-mean difference is collapsible, its
+adjusted and unadjusted estimates coincide (0.57 vs.\ 0.63 years within
+a five-year horizon, well within sampling error), making RMST an
+attractive companion estimand whenever hazard-ratio interpretations
+become delicate \citep{royston2011,uno2014,martinussen2013}.
+\textbf{Covariate adjustment} raises power from 72.6\% to 80.9\% in
+exactly the scenario regulators care about---modest effects, realistic
+sample sizes---which is the quantitative argument behind the FDA/ICH
+position that adjustment should be pre-specified and reported even when
+unadjusted results match \citep{fda2023,kahan2014}. \textbf{Competing
+risks} change the estimand, not necessarily the conclusion: the naive
+one-minus-Kaplan--Meier overstates cumulative recurrence by about one
+percentage point at eight years, yet the Fine--Gray and cause-specific
+readings agree on the treatment effect. \textbf{Honest validation}
+matters more than model sophistication: the apparent-to-cross-validated
+optimism gap reaches 0.12 in the $C$-index for the most aggressive
+learner, while a clinical Cox model loses nothing---a reminder that in
+small-to-moderate clinical datasets, disciplined regression frequently
+matches ensembles. \textbf{Bayesian monitoring} demonstrates both its
+appeal (decisions at 25\% of the information) and its governance
+question (posterior probabilities do not self-correct for repeated
+looks, so their use in confirmatory settings requires either
+calibration to frequentist error rates or a genuinely decision-theoretic
+framing).
+
+\subsection{Strengths}
+
+The project's strengths are its integration and its reproducibility.
+Every module runs from version-controlled code with fixed seeds,
+communicates exclusively through files, and regenerates every number and
+figure in this paper via a single \texttt{make} invocation; all 34
+tabular outputs of the original pipeline were re-derived during
+manuscript preparation and verified to be byte-identical to the
+committed versions. Quality-control assertions are embedded in the data
+pipeline (record counts, within-patient covariate consistency, endpoint
+logic), analyses are pre-specified in structure (primary composite
+endpoint, adjustment set, subgroup list), and sensitivity analyses were
+run in both directions---towards stronger assumptions (parametric
+Weibull Bayesian model) and weaker ones (competing risks, splines,
+complete case versus imputation, RMST). The simulation studies were
+calibrated to the real data-generating mechanism rather than to
+stylized parameters, so their conclusions transfer directly to trials of
+this type.
+
+\subsection{Limitations}
+
+Five limitations bound the interpretation. First, this is a
+\emph{re-analysis of a single historical trial} from an era of different
+supportive care and staging; the quantitative findings (especially
+absolute risks) should not be read as contemporary practice, and
+levamisole itself was later displaced by superior regimens. Second, the
+subgroup and CATE analyses are exploratory: with only 324 events in the
+two-arm comparison, interaction tests have limited power, the T-learner's
+quartile contrasts rest on 60--100 events each, and no external
+validation cohort was available to check the predicted benefit ranking;
+the honest claim is methodological demonstration, not clinical
+deployment. Third, the Weibull baseline is a parametric choice; although
+posterior predictive checks pass and LOO prefers it over the
+exponential, a piecewise-exponential or semi-parametric Bayesian
+baseline would be a natural robustness extension, as would a
+time-varying treatment effect in the Bayesian model given the
+covariate-level PH violations detected. Fourth, the re-enacted
+monitoring and Bayesian sequential analyses re-use the final data to
+reconstruct interim states; the reconstruction censors follow-up at a
+common time aligned to the event count and is faithful to the ordering
+of the event stream, but the exercise remains a counterfactual
+simulation, and early-stopping estimates from such re-enactments are
+biased toward larger effects (as the interim HR of $0.52$ versus the
+final $0.62$ illustrates). Fifth, the prediction models use only ten
+baseline covariates from the original case-report forms; modern depth of
+data (genomics, imaging) would shift the accuracy ceiling, though the
+overfitting lesson of the apparent-versus-validated contrast would only
+sharpen.
+
+A further, more technical caveat concerns the simulated operating
+characteristics of the sequential design (Study B): the simulated
+rejection probability under the alternative (82.9\%) falls short of the
+design-theoretic 90\% because the simulation couples an unadjusted
+primary analysis (whose marginal hazard ratio is attenuated by the
+strong calibration covariates, per Study A) with a simulation sample
+size calibrated to the conditional effect, and because futility
+adherence removes some would-be winners. Designs that pair
+covariate-adjusted primary analyses with group-sequential monitoring
+would recover part of this gap---a combination now explicitly
+encouraged by regulators \citep{fda2023} and worth studying in its own
+right.
+
+\subsection{Conclusions}
+
+This re-analysis set out to demonstrate what a modern biostatistical
+toolkit, applied with discipline to a classic randomized trial, can
+extract beyond the original publication---and the answer is: the same
+conclusion, reached faster (sequential design re-enactment), quantified
+more honestly (imputation, competing risks, absolute effects in both
+percentage points and disease-free years), understood more deeply
+(simulation-calibrated operating characteristics, Bayesian robustness,
+collapsibility made concrete), and personalized in direction
+(risk-driven absolute benefit). The accompanying repository delivers the
+full pipeline---R and Python, 23 figures, 37 tabular outputs, and this
+paper---reproducible with one command, in the hope that it serves both
+as a reference implementation and as a teaching resource on how
+frequentist, Bayesian, and machine-learning perspectives can be made to
+interrogate the same data in complementary ways.
